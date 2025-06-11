@@ -26,4 +26,6 @@ categories = ["Strength", "Speed", "Stealth", "Cunning"]
 MIN = 1
 MAX = 25
 
-def 
+def
+
+this is mr p checking the upload works
