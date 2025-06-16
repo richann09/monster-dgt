@@ -27,5 +27,3 @@ MIN = 1
 MAX = 25
 
 def
-
-this is mr p checking the upload works
