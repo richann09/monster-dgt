@@ -26,22 +26,44 @@ categories = ["Strength", "Speed", "Stealth", "Cunning"]
 MIN = 1
 MAX = 25
 
+def display_card(name_m, stats):
+    result = name + ":\n"
+    for stat_name, value in stats.items():
+        result += " " + stat_name + ": " + str(value) + "\n"
+    return result
+
 def delete_cardm():
     """Remove a monster card from the catalogue."""
     name_m = easygui.enterbox("Enter the monster name to delete:", "Delete Monster Card.")
+
+    if name_m in catalogue:
+        confirm = easygui.buttonbox("Are you sure you want to delete " + name_m + "?", choices = ["Yes", "No"])
+        if confirm == "Yes":
+            del catalogue[name_m]
+            easygui.msgbox("Card Deleted.")
+    else:
+        easygui.msgbox("No card was deleted", "Cancelled")
+
+def search_card():
+    """Look up a monster card by name and optionally update its stats."""
+    name_m = easygui.enterbox("Enter monster name to serach:", "Search monster card")
     if not name_m:
         return
 
-    if name_m not in catalogue:
-        easygui.msgbox("No card found with the name " + name_m + ".", "Not Found")
-
     if name_m in catalogue:
-            if easygui.buttonbox("Are you sure you want to delete" + name_m + "?", choices = ["Yes", "No"],
-                                 "Confirm deletion")):
-                del catalogue[name_m]
-                easygui.msgbox(name_m + " has been deleted from the catalogue.", "deleted")
+        stats = catalogue[name_m]
+        monster_info = display_card(name_m, stats)
+        edit = easygui.buttonbox("Found card:\n" + monster_info + "\n\nDo you want to edit this card?", choices = ["Yes", "No"])
+        if edit == "Yes":
+            for category in categories:
+                value = easygui.integerbox("Edit " + category + " (any number):", default=stats[category])
+                stats[category] = value
+                catalogue[name_m] = stats
+                easygui.msgbox("Card updated.")
 
     else:
-        easygui.msgbox("No card was deleted", "Cancelled")
-            
+        easygui.msgbox("Card not found")
+
+
+    
     
