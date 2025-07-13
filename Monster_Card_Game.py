@@ -26,12 +26,24 @@ categories = ["Strength", "Speed", "Stealth", "Cunning"]
 MIN = 1
 MAX = 25
 
-def display_card(name_m, stats):
-    result = name + ":\n"
-    for stat_name, value in stats.items():
-        result += " " + stat_name + ": " + str(value) + "\n"
-    return result
+def display_card():
+    """Display all the monster card in the catalogue"""
 
+    display = "Monster catalpgue\n" + "=" * 20 + "\n\n"
+
+    for name, stats in catalogue.items():
+        display += name
+        display += "Strength" + str(stats["strength"]) + "\n"
+        display += "Speed" + str(stats["speed"]) + "\n"
+        display += "Stealth" + str(stats["stealth"]) + "\n"
+        display += "Cunning" + str(stats["cunning"]) + "\n"
+
+    display += "Total monster card: " + str(len(catalogue))
+
+    easygui.textbox("Monster card catalogue", "All cards", display)
+    print(display)
+
+        
 def delete_cardm():
     """Remove a monster card from the catalogue."""
     name_m = easygui.enterbox("Enter the monster name to delete:", "Delete Monster Card.")
@@ -64,6 +76,66 @@ def search_card():
     else:
         easygui.msgbox("Card not found")
 
+def add_card():
+    """Add a new card monster card"""
+    name_m = easygui.enterbox("enter monster name:")
+    if not name_m:
+        return
 
-    
-    
+    if name_m in catalogue:
+        easygui.msgbox("monster card already exists!")
+
+
+    strength = easygui.enterbox("Enter strength (1-25):")
+    speed = easygui.enterbox("Enter speed (1-25):")
+    stealth = easygui.enterbox("Enter stealth (1-25):")
+    cunning = easygui.enterbox("Enter cunning (1-25):")
+
+    try:
+        strength = int(stength)
+        speed = int(speed)
+        stealth = int(stealth)
+        cunning = int(cunning)
+
+        if not (1 < strength < 25 and 1 < speed < 25 and 1 < stealth < 25 and 1 < cunning < 25):
+            easygui.msgbox("all values must be between 1 to 25")
+            return
+
+        except:
+            easygui.msgbox("Please enter valid numbers")
+            return
+
+        catalogue[name_m] = {
+            "strength": strength,
+            "speed": speed,
+            "stealt": stealth,
+            "cunning": cunning
+            }
+
+        easygui.msgbox(card_info, "card added")
+
+
+def main():
+    """main program"""
+    easygui.msgbox("Welcome to Monster card catalogue")
+
+    while True:
+        choice = easygui.buttonbox("Choose an option:",
+                                   "Monster card catalogue",
+                                   ["Add monster", "Search/Edit Monster", "Delete monster", "Display Monster", "Exit"])
+
+        if choice == "Add monster":
+            add_card()
+        elif choice == "Search/Edit Monster":
+            search_card()
+        elif choice == "Delete monster":
+            delete_cardm
+        elif choice == "Display Monster":
+            display_card
+        elif choice == "Exit":
+            if easygui.ynbox("Are you sure u want to exit?", "Exit"):
+                easygui.msgbox("Goodbye")
+                break
+
+if __name__ == "__main__":
+    main()
