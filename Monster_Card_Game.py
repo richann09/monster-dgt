@@ -1,6 +1,6 @@
-
 import easygui
 
+#monster card catalogue
 catalogue = {"Stoneling":
              {"Strength": 7,  "Speed": 1,  "Stealth": 25, "Cunning": 15},
              "Vexscream":
@@ -24,34 +24,36 @@ catalogue = {"Stoneling":
 }
 
 categories = ["Strength", "Speed", "Stealth", "Cunning"]
-MIN = 1
-MAX = 25
 
 def display_card():
     """Display all the monster card in the catalogue"""
-
+    #the display string
     display = "Monster catalogue\n" + "=" * 20 + "\n\n"
-
+    #loop through each card and add to display
     for name, stats in catalogue.items():
         display += name + "\n"
         display += " Strength: " + str(stats["Strength"]) + "\n"
         display += " Speed: " + str(stats["Speed"]) + "\n"
         display += " Stealth: " + str(stats["Stealth"]) + "\n"
         display += " Cunning: " + str(stats["Cunning"]) + "\n\n"
-
+    #add total count of the card at the end
     display += "\nTotal monster card: " + str(len(catalogue))
-
+    
     easygui.textbox("Monster card catalogue", "All cards", display)
     print(display)
 
         
 def delete_cardm():
     """Remove a monster card from the catalogue."""
+    #Get the monster name from the user
     name_m = easygui.enterbox("Enter the monster name to delete:", "Delete Monster Card.")
 
+    #check if card exist in catalogue
     if name_m in catalogue:
+        #Showing conformation
         confirm = easygui.buttonbox("Are you sure you want to delete " + name_m + "?", choices = ["Yes", "No"])
         if confirm == "Yes":
+            #delete the card from dialogue
             del catalogue[name_m]
             easygui.msgbox("Card Deleted.")
     else:
@@ -59,26 +61,34 @@ def delete_cardm():
 
 def search_card():
     """Look up a monster card by name and optionally update its stats."""
+    #Get the monster name from the user
     name_m = easygui.enterbox("Enter monster name to search:", "Search monster card")
+    #checks if the user enter nothing/cancel
     if not name_m:
         return
-
+    #check if card exist in catalogue
     if name_m in catalogue:
+        #get the card stats
         stats = catalogue[name_m]
-
+        #monster card info
         m_info = name_m + "\n"
         m_info += " Strength: " + str(stats["Strength"]) + "\n"
         m_info += " Speed: " + str(stats["Speed"]) + "\n"
         m_info += " Stealth: " + str(stats["Stealth"]) + "\n"
         m_info += " Cunning: " + str(stats["Cunning"]) + "\n"
-        
+
+        #Ask user if they want to edit their card
         edit = easygui.buttonbox("Found card:\n" + m_info + "\n\nDo you want to edit this card?", choices = ["Yes", "No"])
         if edit == "Yes":
+            #loop through each category to allow to edit
             for category in categories:
+                #Get new value from user with current value as default
                 value = easygui.integerbox("Edit " + category + " (1-25):", default=stats[category])
-                if value is not None and 1 < value < 25:
+                if value is not None and 1 <= value <= 25:
+                    #update stat
                     stats[category] = value
                 else:
+                    #show error message for invalid input
                     easygui.msgbox("Please put valid numbers for " + category + ". (Between 1-25)")
                     return
             catalogue[name_m] = stats
@@ -89,18 +99,20 @@ def search_card():
 
 def add_card():
     """Add a new card monster card"""
+    #Get the monster name from the user
     name_m = easygui.enterbox("enter monster name:")
+    #checks if the user enter nothing/cancel
     if not name_m:
         return
-
+    #check if the card already exist in the catalogue
     if name_m in catalogue:
         easygui.msgbox("monster card already exists!")
-
+    #Get all the stats from user 
     strength = easygui.enterbox("Enter strength (1-25):")
     speed = easygui.enterbox("Enter speed (1-25):")
     stealth = easygui.enterbox("Enter stealth (1-25):")
     cunning = easygui.enterbox("Enter cunning (1-25):")
-
+    #Validate the input and convert to intergers
     try:
         strength = int(strength)
         speed = int(speed)
@@ -115,14 +127,16 @@ def add_card():
     except:
         easygui.msgbox("Please enter valid numbers")
         return
-
+    #temporary card data for the confirmation
     monster_temp = {
         "Strength": strength,
         "Speed": speed,
         "Stealth": stealth,
         "Cunning": cunning
         }
+    #Loop for confirmation and editing
     while True:
+        #Display the card details for the confirmation
         details_c = "Confirm the monster card details:\n\n"
         details_c += " " + name_m + "\n"
         details_c += "Strength" + str(monster_temp["Strength"]) + "\n"
@@ -130,17 +144,21 @@ def add_card():
         details_c += "Stealth" + str(monster_temp["Stealth"]) + "\n"
         details_c += "Cunning" + str(monster_temp["Cunning"]) + "\n\n"
         details_c += "Are these details correct?"
-
+        
+        #ask for confirm details
         confirm_card = easygui.buttonbox(details_c, "Confirm Monster card", ["Yes, add", "No, make changes"])
 
         if confirm_card == "Yes, add":
+            #Add the card to catalogue
             catalogue[name_m] = monster_temp
             easygui.msgbox("Card added successfully to the catalogue!", "Card Added")
             break
 
         elif confirm_card == "No, make changes":
+            #user choose what to edit
             edit_c = ["Strength", "Speed", "Stealth", "Cunning"]
-
+            
+            #Show current valu and ask what to edit
             edit_d = "Which one would you like to edit?\n\n"
             edit_d += "Strength: " + str(monster_temp["Strength"]) + "\n"
             edit_d += "Speed: " + str(monster_temp["Speed"]) + "\n"
@@ -150,20 +168,23 @@ def add_card():
             choice = easygui.choicebox(edit_d, "Edit monster card", edit_c)
 
             if choice:
+                #Get new value for the chosen category
                 current_i = monster_temp[choice]
                 new_i = easygui.integerbox("enter new " + choice + " (1-25):", default=current_i)
 
                 if new_i is not None and 1 <= new_i <= 25:
+                    #update the value
                     monster_temp[choice] = new_i
                     easygui.msgbox(choice + " updated to " + str(new_i))
                 else:
                     easygui.msgbox("Invalid numbers. " + choice + "Between 1-25")
-        
+
 def main():
     """main program"""
     easygui.msgbox("Welcome to Monster card catalogue")
-
+    #Main program loop
     while True:
+        #Show menu options
         choice = easygui.buttonbox("Choose an option:",
                                    "Monster card catalogue",
                                    ["Add monster", "Search/Edit Monster", "Delete monster", "Display Monster", "Exit"])
@@ -180,6 +201,6 @@ def main():
             if easygui.ynbox("Are you sure u want to exit?", "Exit"):
                 easygui.msgbox("Goodbye")
                 break
-
+#run the program
 if __name__ == "__main__":
     main()
