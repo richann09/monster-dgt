@@ -1,4 +1,7 @@
-"""This is thr comment they want at the top of your program."""
+"""
+This is a Monster Card Game using easygui, with 4 function
+which are the Add, Search, Delete, Display, and edit cards.
+"""
 
 import easygui
 
@@ -59,7 +62,7 @@ def delete_cardm():
             del catalogue[name_m]
             easygui.msgbox("Card Deleted.")
     else:
-        easygui.msgbox("No card was deleted", "Cancelled")
+        easygui.msgbox("No card was deleted.", "Cancelled")
 
 
 def search_card():
@@ -102,23 +105,23 @@ def search_card():
             easygui.msgbox("Card updated.")
 
     else:
-        easygui.msgbox("Card not found")
+        easygui.msgbox("Card not found.")
 
 
 def add_card():
     """Add a new card monster card."""
-    name_m = easygui.enterbox("enter monster name:")
+    name_m = easygui.enterbox("Enter the monster card name:")
     # checks if the user enter nothing/cancel
     if not name_m:
         return
     # check if the card already exist in the catalogue
     if name_m in catalogue:
-        easygui.msgbox("monster card already exists!")
+        easygui.msgbox("Monster card already exists!")
     # Get all the stats from user
-    strength = easygui.enterbox("Enter strength (1-25):")
-    speed = easygui.enterbox("Enter speed (1-25):")
-    stealth = easygui.enterbox("Enter stealth (1-25):")
-    cunning = easygui.enterbox("Enter cunning (1-25):")
+    strength = easygui.enterbox("Enter Strength (1-25):")
+    speed = easygui.enterbox("Enter Speed (1-25):")
+    stealth = easygui.enterbox("Enter Stealth (1-25):")
+    cunning = easygui.enterbox("Enter Cunning (1-25):")
     # Validate the input and convert to intergers
     try:
         strength = int(strength)
@@ -129,11 +132,11 @@ def add_card():
         # checks the numbers added are between 1-25
         if not (1 <= strength <= 25 and 1 <= speed <= 25 and
                 1 <= stealth <= 25 and 1 <= cunning <= 25):
-            easygui.msgbox("all values must be between 1 to 25")
+            easygui.msgbox("All values must be between 1 to 25 only.")
             return
 
     except:
-        easygui.msgbox("Please enter valid numbers")
+        easygui.msgbox("Please enter valid numbers.")
         return
     # temporary card data for the confirmation
     monster_temp = {
@@ -147,14 +150,14 @@ def add_card():
         # Display the card details for the confirmation
         details_c = "Confirm the monster card details:\n\n"
         details_c += " " + name_m + "\n"
-        details_c += "Strength" + str(monster_temp["Strength"]) + "\n"
-        details_c += "Speed" + str(monster_temp["Speed"]) + "\n"
-        details_c += "Stealth" + str(monster_temp["Stealth"]) + "\n"
-        details_c += "Cunning" + str(monster_temp["Cunning"]) + "\n\n"
+        details_c += "Strength: " + str(monster_temp["Strength"]) + "\n"
+        details_c += "Speed: " + str(monster_temp["Speed"]) + "\n"
+        details_c += "Stealth: " + str(monster_temp["Stealth"]) + "\n"
+        details_c += "Cunning: " + str(monster_temp["Cunning"]) + "\n\n"
         details_c += "Are these details correct?"
 
         # ask for confirm details
-        confirm_card = easygui.buttonbox(details_c, "Confirm Monster card",
+        confirm_card = easygui.buttonbox(details_c, "Confirm Monster card?",
                                          ["Yes, add", "No, make changes"])
 
         if confirm_card == "Yes, add":
@@ -180,30 +183,30 @@ def add_card():
             if choice:
                 # Get new value for the chosen category
                 current_i = monster_temp[choice]
-                new_i = easygui.integerbox("enter new " + choice + " (1-25):",
+                new_i = easygui.integerbox("Enter new " + choice + " (1-25):",
                                            default=current_i)
 
                 if new_i is not None and 1 <= new_i <= 25:
                     # update the value
                     monster_temp[choice] = new_i
-                    easygui.msgbox(choice + " updated to " + str(new_i))
+                    easygui.msgbox(choice + " updated to " + str(new_i) + ".")
                 else:
                     easygui.msgbox("Invalid numbers. " + choice +
                                    "Between 1-25")
 
 
 def main():
-    """This is the main program."""
-    easygui.msgbox("Welcome to Monster card catalogue")
+    """The main program."""
+    easygui.msgbox("Welcome to Monster card catalogue!", "Monster Card Game")
 
     # Main program loop
     while True:
         # Show menu options
-        choice = easygui.buttonbox("Choose an option:",
+        choice = easygui.buttonbox("Choose an option below:",
                                    "Monster card catalogue",
                                    ["Add monster", "Search/Edit Monster",
                                     "Delete monster", "Display Monster",
-                                    "Exit"])
+                                    "Exit"], "Card Option")
 
         if choice == "Add monster":
             add_card()
@@ -215,7 +218,7 @@ def main():
             display_card()
         elif choice == "Exit":
             if easygui.ynbox("Are you sure u want to exit?", "Exit"):
-                easygui.msgbox("Goodbye")
+                easygui.msgbox("Goodbye!")
                 break
 # run the program
 if __name__ == "__main__":
